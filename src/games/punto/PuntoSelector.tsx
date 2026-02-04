@@ -1,5 +1,5 @@
 
-import {Clock,  Zap, Target, Brain } from 'lucide-react';
+import {Zap, Target} from 'lucide-react';
 
 export interface PuntoDrill {
   id: string;
@@ -15,29 +15,18 @@ interface PuntoSelectorProps {
 export function PuntoSelector({ onSelectDrill }: PuntoSelectorProps) {
   const drills: PuntoDrill[] = [
     {
-      id: 'basic-throw',
-      title: 'Lancer Basique',
-      description: 'Apprenez les techniques de base pour lancer le frisbee avec précision',
+      id: 'draw-calculation',
+      title: 'Calcul Egalite',
+      description: 'Ameliore toi en calculant des egalites rapidement et avec precision',
       icon: Target,
     },
     {
-      id: 'power-throw',
-      title: 'Lancer Puissant',
+      id: 'punto-game',
+      title: 'Punto Game',
       description: 'Développez votre force et votre technique pour des lancers plus longs',
       icon: Zap,
     },
-    {
-      id: 'competitive-play',
-      title: 'Jeu Compétitif',
-      description: 'Entraînez-vous dans des scénarios de jeu réels pour améliorer vos compétences stratégiques',
-      icon: Clock,
-    },
-    {
-      id: 'team-coordination',
-      title: 'Coordination d\'Équipe',
-      description: 'Apprenez à travailler efficacement avec vos coéquipiers sur le terrain',
-      icon: Brain,
-    }
+    
   ];
 
   return (

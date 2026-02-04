@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { BlackjackSelector } from './BlackjackSelector';
 import { CountingCards } from './CountingCards';
 import { BlackjackCalculation } from './BlackjackCalculation';
+import { DealerCounting } from './DealerCounting';
 
 export function BlackjackTraining() {
   const [selectedDrill, setSelectedDrill] = useState<string | null>(null);
@@ -19,6 +20,7 @@ export function BlackjackTraining() {
       </button>
             {selectedDrill === 'card-values' && <CountingCards />}
             {selectedDrill === 'blackjack-calcul' && <BlackjackCalculation />}
+            {selectedDrill === 'bank-draw' && <DealerCounting />}
     </div>
   ); 
 }

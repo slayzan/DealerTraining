@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { PuntoSelector } from './PuntoSelector';
+import { EqualityCalculation } from './EqualityCalculation';
+import {PuntoGame} from './PuntoGame';
 
 export function PuntoTraining() {
     const [selectedDrill, setSelectedDrill] = useState<string | null>(null);
@@ -19,6 +21,8 @@ export function PuntoTraining() {
                 >
                     ← Retour aux exercices Punto Bunco
                 </button>
+                {selectedDrill === 'draw-calculation' && <EqualityCalculation />}
+                {selectedDrill === 'punto-game' && <PuntoGame />}
             </div>
         );
 }

@@ -171,7 +171,7 @@ export function BlackjackCalculation() {
         <div className="text-center mb-8 sm:mb-12">
           <div className="text-emerald-300 text-sm sm:text-base mb-3">Mise du joueur :</div>
           <div className="text-5xl sm:text-7xl font-bold text-white mb-4">{targetNumber}</div>
-          <div className="text-emerald-400 text-base sm:text-lg">jetons</div>
+          <div className="text-emerald-400 text-base sm:text-lg">euros</div>
         </div>
 
         <div className="max-w-md mx-auto">
@@ -246,9 +246,13 @@ export function BlackjackCalculation() {
         <div className="mt-8 sm:mt-12 p-4 bg-blue-600/10 border border-blue-500/20 rounded-lg max-w-md mx-auto">
           <h4 className="font-medium text-white text-sm sm:text-base mb-2">💡 Astuce :</h4>
           <p className="text-xs sm:text-sm text-blue-200">
-            Pour calculer rapidement : divisez le nombre par 2 et ajoutez-le au nombre original.
+            Pour calculer rapidement : divise le nombre par 2 et ajoute-le au nombre original.
             <br />
-            Exemple : 100 ÷ 2 = 50, puis 100 + 50 = 150
+            Exemple : 150 ÷ 2 = 75, puis 150 + 75 = 225
+            <br />
+            Tu peut aussi faire : blackjack de 200 - blackjack de 50 = 300 - 75 = 225
+            <br />
+            Trouve la méthode qui te convient le mieux et la plus adapté a la situation !
           </p>
         </div>
       </div>
