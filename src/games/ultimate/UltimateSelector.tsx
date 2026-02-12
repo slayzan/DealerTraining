@@ -13,30 +13,7 @@ interface UltimateSelectorProps {
 
 export function UltimateSelector({ onSelectDrill }: UltimateSelectorProps) {
     const drills: UltimateDrill[] = [
-        {
-            id: 'basic-throw',
-            title: 'Lancer Basique',
-            description: 'Apprenez les techniques de base pour lancer le frisbee avec précision',
-            icon: Target,
-        },
-        {
-            id: 'power-throw',
-            title: 'Lancer Puissant',
-            description: 'Développez votre force et votre technique pour des lancers plus longs',
-            icon: Flame,
-        },
-        {
-            id: 'competitive-play',
-            title: 'Jeu Compétitif',
-            description: 'Entraînez-vous dans des scénarios de jeu réels pour améliorer vos compétences stratégiques',
-            icon: Trophy,
-        },
-        {
-            id: 'team-coordination',
-            title: 'Coordination d\'Équipe',
-            description: 'Apprenez à travailler efficacement avec vos coéquipiers sur le terrain',
-            icon: Users,
-        }
+        
     ];
 
     return (
@@ -44,7 +21,7 @@ export function UltimateSelector({ onSelectDrill }: UltimateSelectorProps) {
             <div className="bg-black/30 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-white/10">
                 <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Entraînement Ultimate Texas Hold'em</h2>
                 <p className="text-sm sm:text-base text-emerald-200">
-                    Choisissez un exercice pour développer vos compétences en Ultimate.
+                    Choisissez un exercice pour développer vos compétences en Ultimate et Texas.
                 </p>
             </div>
            <div className='grid sm:grid-cols-2 gap-3 sm:gap-4'>
@@ -69,7 +46,7 @@ export function UltimateSelector({ onSelectDrill }: UltimateSelectorProps) {
                                 <div className="text-emerald-400 text-xs sm:text-sm font-medium">
                                     Commencer l'exercice →
                                 </div>
-                            </button>
+                        </button>
                     )
                 })}
             </div>

@@ -19,7 +19,7 @@ export function PuntoTraining() {
                     onClick={() => setSelectedDrill(null)}
                     className="text-emerald-300 hover:text-emerald-200 mb-4 text-sm sm:text-base"
                 >
-                    ← Retour aux exercices Punto Bunco
+                    ← Retour aux exercices Punto Banco
                 </button>
                 {selectedDrill === 'draw-calculation' && <EqualityCalculation />}
                 {selectedDrill === 'punto-game' && <PuntoGame />}

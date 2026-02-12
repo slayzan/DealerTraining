@@ -23,7 +23,7 @@ export function PuntoSelector({ onSelectDrill }: PuntoSelectorProps) {
     {
       id: 'punto-game',
       title: 'Punto Game',
-      description: 'Développez votre force et votre technique pour des lancers plus longs',
+      description: 'Teste tes connaissances dans une simulation de partie de Punto Banco',
       icon: Zap,
     },
     
