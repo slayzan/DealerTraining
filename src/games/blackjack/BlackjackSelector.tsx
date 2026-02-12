@@ -16,7 +16,7 @@ export function BlackjackSelector({ onSelectDrill }: BlackjackSelectorProps) {
     {
       id: 'card-values',
       title: 'Calculs Cartes',
-      description: 'Mémorisez et calculez la valeur totale de deux cartes',
+      description: 'Mémorise et calcule la valeur totale de deux cartes',
       icon: Target,
     },
     {

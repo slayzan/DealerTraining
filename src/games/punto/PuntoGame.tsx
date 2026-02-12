@@ -459,14 +459,14 @@ export function PuntoGame() {
               disabled={gameState !== 'result' || !!winner}
               className="w-full py-3 sm:py-3 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/50 text-blue-200 rounded-lg font-bold text-sm sm:text-base transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Punto Draw
+              Punto Pioche
             </button>
             <button 
               onClick={() => handleAction('punto-win')}
               disabled={gameState !== 'result' || !!winner}
               className="w-full py-3 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold text-sm sm:text-base transition-colors shadow-lg shadow-blue-900/20 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Punto Win
+              Punto Gagne
             </button>
           </div>
 
@@ -488,14 +488,14 @@ export function PuntoGame() {
               disabled={gameState !== 'result' || !!winner}
               className="w-full py-3 sm:py-3 bg-red-600/20 hover:bg-red-600/30 border border-red-500/50 text-red-200 rounded-lg font-bold text-sm sm:text-base transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Banco Draw
+              Banco Pioche
             </button>
             <button 
               onClick={() => handleAction('banco-win')}
               disabled={gameState !== 'result' || !!winner}
               className="w-full py-3 sm:py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold text-sm sm:text-base transition-colors shadow-lg shadow-red-900/20 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Banco Win
+              Banco Gagne
             </button>
           </div>
 
@@ -512,22 +512,22 @@ export function PuntoGame() {
               <p className="font-bold text-emerald-400 mb-1">Punto</p>
               <ul className="list-disc list-inside space-y-1">
                 <li>0-5 : <span className="text-white">TIRE</span> une carte</li>
-                <li>6-7 : <span className="text-white">RESTE</span> (Stand)</li>
-                <li>8-9 : <span className="text-yellow-400">NATUREL</span> (Fin du tour)</li>
+                <li>6-7 : <span className="text-white">RESTE</span></li>
+                <li>8-9 : <span className="text-yellow-400">Abbatage</span> (Fin du tour)</li>
               </ul>
             </div>
             <div>
               <p className="font-bold text-emerald-400 mb-1">Banco</p>
               <ul className="list-disc list-inside space-y-1">
-                <li>Si Punto Reste : Tire à 0-5, Reste à 6-7</li>
-                <li>Si Punto Tire : Dépend de la 3ème carte du Punto</li>
-                <li>Si Banco 0-2 : Toujours Tirer</li>
-                <li>Si Banco 7 : Toujours Rester</li>
+                <li>2 : Tire si  Punto tire entre 2-7 </li>
+                <li>3 : Tire si  Punto tire sauf si la 3ème carte de Punto est un 8</li>
+                <li>4 : Tire si  Punto tire entre 4-7</li>
+                <li>5 : Tire si  Punto tire entre 5-7</li>
+                <li>6 : Tire si  Punto tire entre 6-7</li>
+                <li>6-7 : Banco prend les regles de Punto entre 0-5</li>
+                <li>8-9 : <span className="text-yellow-400">Abbatage</span> (Fin du tour)</li>
               </ul>
             </div>
-          </div>
-          <div className="mt-4 pt-4 border-t border-white/5 text-xs text-emerald-200/60">
-            <em>Rappel : Si Punto et Banco restent (ex: 6 vs 7), le plus haut score gagne.</em>
           </div>
         </div>
       </div>

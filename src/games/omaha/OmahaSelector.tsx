@@ -15,29 +15,11 @@ interface OmahaSelectorProps {
 export function OmahaSelector({ onSelectDrill }: OmahaSelectorProps) {
   const drills: OmahaDrill[] = [
     {
-      id: 'basic-throw',
-      title: 'Lancer Basique',
-      description: 'Apprenez les techniques de base pour lancer le frisbee avec précision',
+      id: 'Pot-Calcul',
+      title: 'Calcul Pot-Limit',
+      description: 'Améliore ta capacité à calculer rapidement les pots dans une simulation de table.',
       icon: Target,
     },
-    {
-      id: 'power-throw',
-      title: 'Lancer Puissant',
-      description: 'Développez votre force et votre technique pour des lancers plus longs',
-      icon: Zap,
-    },
-    {
-      id: 'competitive-play',
-      title: 'Jeu Compétitif',
-      description: 'Entraînez-vous dans des scénarios de jeu réels pour améliorer vos compétences stratégiques',
-      icon: Clock,
-    },
-    {
-      id: 'team-coordination',
-      title: 'Coordination d\'Équipe',
-      description: 'Apprenez à travailler efficacement avec vos coéquipiers sur le terrain',
-      icon: Brain,
-    }
   ];
 
   return (
