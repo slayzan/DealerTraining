@@ -147,6 +147,8 @@ export function OmahaPotGame() {
     // Roll Dice
     const roll = Math.floor(Math.random() * 6) + 1;
     setDiceResult(roll);
+    const dice = diceResult;
+    console.log(dice);
 
     setTimeout(() => {
       handleDiceResult(roll, playerIdx, updatedPlayers, currentTotalPot, highBet);
@@ -334,7 +336,7 @@ export function OmahaPotGame() {
       <div className="relative aspect-3/4 sm:aspect-video w-full bg-emerald-950/40 rounded-3xl border border-white/5 shadow-2xl mb-8 overflow-hidden [--rx:39%] [--ry:36%] sm:[--rx:44%] sm:[--ry:40%]">
         
         {/* Visual Table */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[52%] h-[48%] sm:w-[70%] sm:h-[60%] bg-emerald-800 rounded-full border-[8px] sm:border-[12px] border-emerald-950 shadow-[0_0_40px_rgba(0,0,0,0.5)]">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[52%] h-[48%] sm:w-[70%] sm:h-[60%] bg-emerald-800 rounded-full border-8 sm:border-12 border-emerald-950 shadow-[0_0_40px_rgba(0,0,0,0.5)]">
            {gameState === 'idle' && (
               <div className="absolute inset-0 flex items-center justify-center opacity-30 pointer-events-none">
                  <div className="text-center">

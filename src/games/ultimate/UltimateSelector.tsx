@@ -1,4 +1,4 @@
-import { Target, Flame, Trophy, Users } from 'lucide-react';
+
 
 export interface UltimateDrill {
   id: string;
