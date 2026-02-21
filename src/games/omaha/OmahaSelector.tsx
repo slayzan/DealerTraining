@@ -23,7 +23,7 @@ export function OmahaSelector({ onSelectDrill }: OmahaSelectorProps) {
     {
       id: 'Board',
       title: 'Lecture de jeu',
-      description: 'Améliore ta capacité à calculer rapidement les pots dans une simulation de table.',
+      description: 'Améliore ta lecture de jeu en trouvant qui gagne la partie.',
       icon: Target,
     },
   ];
