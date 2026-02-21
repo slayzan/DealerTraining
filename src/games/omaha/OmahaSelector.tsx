@@ -1,5 +1,5 @@
 
-import {Clock,  Zap, Target, Brain } from 'lucide-react';
+import {Target} from 'lucide-react';
 
 export interface OmahaDrill {
   id: string;
@@ -17,6 +17,12 @@ export function OmahaSelector({ onSelectDrill }: OmahaSelectorProps) {
     {
       id: 'Pot-Calcul',
       title: 'Calcul Pot-Limit',
+      description: 'Améliore ta capacité à calculer rapidement les pots dans une simulation de table.',
+      icon: Target,
+    },
+    {
+      id: 'Board',
+      title: 'Lecture de jeu',
       description: 'Améliore ta capacité à calculer rapidement les pots dans une simulation de table.',
       icon: Target,
     },

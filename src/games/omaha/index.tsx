@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { OmahaSelector } from './OmahaSelector';
 import { OmahaPotGame } from './OmahaPot';
+import { OmahaWinnerGame } from './OmahaBoardWinner';
 
 export function OmahaTraining() {
     const [selectedDrill, setSelectedDrill] = useState<string | null>(null);
@@ -21,6 +22,7 @@ export function OmahaTraining() {
                     ← Retour aux exercices Omaha
                 </button>
                 {selectedDrill === 'Pot-Calcul' && <OmahaPotGame />}
+                {selectedDrill == 'Board' && <OmahaWinnerGame/>}
             </div>
         );
 }

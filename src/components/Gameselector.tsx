@@ -1,4 +1,4 @@
-import { Spade, Heart, Diamond, Club, GraduationCap, Coins } from 'lucide-react';
+import { Spade, Heart, Diamond, Club} from 'lucide-react';
 
 interface GameSelectorProps {
     onSelect: (game: 'blackjack' | 'ultimate' | 'menu' | 'punto bunco' | 'omaha') => void;
