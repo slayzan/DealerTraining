@@ -243,17 +243,13 @@ export function OmahaPotGame() {
       }, 1500);
 
     } else {
-      // Logic: Blocking error. 
-      // Do NOT show answer. Wait for user to retry.
       setFeedback({
         correct: false,
         message: "Incorrect"
       });
       
-      // Clear input to encourage retry
       setUserInput('');
       
-      // Auto-clear feedback after short delay to allow typing again
       setTimeout(() => {
         setFeedback(null);
       }, 1000);
@@ -490,22 +486,17 @@ export function OmahaPotGame() {
 
 /**
  * Logique de calcul pour le Pot-Limit Omaha (PLO).
- * Réintégrée dans le composant pour simplifier l'architecture.
- */
+*/
 
 /**
  * Calcule la relance maximale autorisée ("POT").
- * Formule Casino: (3 * HighBet) + (committedByOthers - HighBet)
- * Note: committedByOthers inclut le HighBet, on le retire donc pour éviter le double compte.
- */
+ * Formule: (3 * HighBet) + (committedByOthers - HighBet)
+*/
 function calculateMaxRaise(highBet: number, committedByOthers: number): number {
   const othersExcludingHighBet = committedByOthers - highBet;
   return (highBet * 3) + othersExcludingHighBet;
 }
 
-/**
- * Valide si la réponse du joueur est correcte.
- */
 function validatePotRaise(
   playerInput: number,
   params: { highBet: number; committedByOthers: number }

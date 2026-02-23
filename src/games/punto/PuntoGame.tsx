@@ -16,6 +16,14 @@ export function PuntoGame() {
   const [gameState, setGameState] = useState<'idle' | 'dealing' | 'result' | 'game-over'>('idle');
   const [winner, setWinner] = useState<'punto' | 'banco' | 'egalite' | null>(null);
   const [difficulty, setDifficulty] = useState<'easy' | 'hard'>('easy');
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     setDeck(shuffleDeck(createDeck()));
@@ -341,74 +349,94 @@ export function PuntoGame() {
           </div>
         )}
 
-        {/* Game Table */}
-        <div className="relative min-h-75 bg-emerald-900/40 rounded-xl border border-white/5 p-2 sm:p-8 flex flex-col justify-center">
-          
-          <div className="flex flex-row items-start justify-between sm:justify-around w-full">
-            {/* Left: Punto */}
-            <div className="flex flex-col items-center w-1/3 mb-4">
-              <div className="text-blue-400 font-bold text-lg sm:text-xl mb-20 sm:mb-28 tracking-widest uppercase">Punto</div>
-              <div className="relative flex justify-center items-center -space-x-8 sm:space-x-0 gap-0 sm:gap-6 h-20 sm:h-35 w-full transform scale-75 sm:scale-100 origin-top">
-                {puntoHand.map((card, idx) => ( 
-                  <motion.div 
-                    layout
-                    initial={{ opacity: 0, x: -30, scale: 0.8 }}
-                    animate={{ opacity: 1, x: 0, scale: 1 }}
+        <div className="relative min-h-75 bg-emerald-900/40 rounded-xl border border-white/5 px-8 py-1 sm:p-1 flex flex-col justify-center">
+  
+       <div className="flex flex-row items-center justify-between sm:justify-around w-full">
+
+            {/* Banco */}
+          <div className="flex flex-col items-center w-1/3">
+
+              {/* Zone haute réservée */}
+              <div className="h-27.5 flex items-end justify-center">
+                {bancoHand.length === 3 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -20, scale: 0.8 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
                     transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                    key={idx} 
-                    className={`shrink-0 ${
-                      idx === 2 
-                        ? 'relative sm:absolute sm:-top-24 sm:left-1/2 sm:-translate-x-1/2 sm:rotate-90 z-20 shadow-xl sm:origin-center' 
-                        : 'relative z-' + idx
-                    }`} 
-                    style={{ zIndex: idx === 2 ? 20 : idx }}
+                    className="rotate-90 shadow-xl"
                   >
-                    <PlayingCard card={card} />
+                    <PlayingCard card={bancoHand[2]} size={isMobile ? 'small' : 'medium'} minimal={isMobile}/>
                   </motion.div>
-                ))}
-                {puntoHand.length === 0 && (
-                  <div className="w-17.5 sm:w-25 h-20 sm:h-35 border-2 border-white/10 border-dashed rounded-lg flex items-center justify-center">
-                    <span className="text-white/20 text-[10px] sm:text-xs">Punto</span>
-                  </div>
-                )} 
+                )}
+              </div>
+
+              {/* Zone basse fixe */}
+              <div className="h-50 flex flex-col items-center justify-start">
+
+                <div className="flex gap-3 sm:gap-6 mb-6">
+                  {bancoHand.slice(0, 2).map((card, idx) => (
+                    <motion.div
+                      key={idx}
+                      initial={{ opacity: 0, y: 30, scale: 0.8 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                    >
+                      <PlayingCard card={card} size={isMobile ? 'small' : 'medium'} minimal={isMobile} />
+                    </motion.div>
+                  ))}
+                </div>
+
+                <div className="text-red-400 font-bold text-lg tracking-widest uppercase">
+                  Banco
+                </div>
+
               </div>
             </div>
 
-            {/* Center: VS or Divider */}
-            <div className="flex flex-col items-center justify-center h-20 sm:h-35 w-auto px-2">
-              <div className="w-px h-full bg-white/10"></div>
-            </div> 
-
-            {/* Right: Banco */}
-            <div className="flex flex-col items-center w-1/3 mb-4">
-              <div className="text-red-400 font-bold text-lg sm:text-xl mb-20 sm:mb-28 tracking-widest uppercase">Banco</div>
-              <div className="relative flex justify-center items-center -space-x-8 sm:space-x-0 gap-0 sm:gap-6 h-20 sm:h-35 w-full transform scale-75 sm:scale-100 origin-top">
-                {bancoHand.map((card, idx) => ( 
-                  <motion.div 
-                    layout
-                    initial={{ opacity: 0, x: -30, scale: 0.8 }}
-                    animate={{ opacity: 1, x: 0, scale: 1 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                    key={idx} 
-                    className={`shrink-0 ${
-                      idx === 2 
-                        ? 'relative sm:absolute sm:-top-24 sm:left-1/2 sm:-translate-x-1/2 sm:rotate-90 z-20 shadow-xl sm:origin-center' 
-                        : 'relative z-' + idx
-                    }`} 
-                    style={{ zIndex: idx === 2 ? 20 : idx }}
-                  >
-                    <PlayingCard card={card} />
-                  </motion.div>
-                ))}
-                {bancoHand.length === 0 && (
-                  <div className="w-17.5 sm:w-25 h-20 sm:h-35 border-2 border-white/10 border-dashed rounded-lg flex items-center justify-center">
-                    <span className="text-white/20 text-[10px] sm:text-xs">Banco</span>
+                  {/* Divider */}
+                  <div className="flex flex-col items-center justify-center h-32 sm:h-44 w-auto px-0 sm:px-4">
+                    <div className="w-px h-full bg-white/10"></div>
                   </div>
-                )} 
+
+                  {/* Punto */}
+                <div className="flex flex-col items-center w-1/3">
+
+              <div className="h-27.5 flex items-end justify-center">
+                {puntoHand.length === 3 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -20, scale: 0.8 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                    className="rotate-90 shadow-xl"
+                  >
+                    <PlayingCard card={puntoHand[2]} size={isMobile ? 'small' : 'medium'} minimal={isMobile}  />
+                  </motion.div>
+                )}
+              </div>
+
+              <div className="h-50 flex flex-col items-center justify-start">
+
+                <div className="flex gap-3  sm:gap-6 mb-6">
+                  {puntoHand.slice(0, 2).map((card, idx) => (
+                    <motion.div
+                      key={idx}
+                      initial={{ opacity: 0, y: 30, scale: 0.8 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                    >
+                      <PlayingCard card={card} size={isMobile ? 'small' : 'medium'} minimal={isMobile}/>
+                    </motion.div>
+                  ))}
+                </div>
+
+                <div className="text-blue-400 font-bold text-lg tracking-widest uppercase">
+                  Punto
+                </div>
+
+                </div>
+              </div>
               </div>
             </div>
-          </div>
-
           {/* Winner Overlay */}
           {winner && (
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
@@ -452,6 +480,35 @@ export function PuntoGame() {
         {/* Action Buttons */}
         <div className="flex justify-between items-start gap-2 sm:gap-4 px-1 sm:px-12">
           
+          {/* Banco Actions */}
+          <div className="flex flex-col gap-2 sm:gap-3 flex-1">
+            <button 
+              onClick={() => handleAction('banco-draw')}
+              disabled={gameState !== 'result' || !!winner}
+              className="w-full py-3 sm:py-3 bg-red-600/20 hover:bg-red-600/30 border border-red-500/50 text-red-200 rounded-lg font-bold text-sm sm:text-base transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Banco Pioche
+            </button>
+            <button 
+              onClick={() => handleAction('banco-win')}
+              disabled={gameState !== 'result' || !!winner}
+              className="w-full py-3 sm:py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold text-sm sm:text-base transition-colors shadow-lg shadow-red-900/20 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+              Banco Gagne
+            </button>
+          </div>
+
+          {/* Middle Action */}
+          <div className="flex flex-col gap-2 sm:gap-3 w-[20%] sm:w-40 pt-4 sm:pt-0">
+             <button 
+              onClick={() => handleAction('egalite')}
+              disabled={gameState !== 'result' || !!winner}
+              className="w-full py-3 sm:py-3 bg-green-600/20 hover:bg-green-600/30 border border-green-500/50 text-green-200 rounded-lg font-bold text-sm sm:text-base transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Égalité
+            </button>
+          </div>
+
           {/* Punto Actions */}
           <div className="flex flex-col gap-2 sm:gap-3 flex-1">
             <button 
@@ -467,35 +524,6 @@ export function PuntoGame() {
               className="w-full py-3 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold text-sm sm:text-base transition-colors shadow-lg shadow-blue-900/20 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Punto Gagne
-            </button>
-          </div>
-
-          {/* Middle Action */}
-          <div className="flex flex-col gap-2 sm:gap-3 w-[20%] sm:w-40 pt-4 sm:pt-0">
-             <button 
-              onClick={() => handleAction('egalite')}
-              disabled={gameState !== 'result' || !!winner}
-              className="w-full py-3 sm:py-3 bg-green-600/20 hover:bg-green-600/30 border border-green-500/50 text-green-200 rounded-lg font-bold text-sm sm:text-base transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Égalité
-            </button>
-          </div>
-
-          {/* Banco Actions */}
-          <div className="flex flex-col gap-2 sm:gap-3 flex-1">
-            <button 
-              onClick={() => handleAction('banco-draw')}
-              disabled={gameState !== 'result' || !!winner}
-              className="w-full py-3 sm:py-3 bg-red-600/20 hover:bg-red-600/30 border border-red-500/50 text-red-200 rounded-lg font-bold text-sm sm:text-base transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Banco Pioche
-            </button>
-            <button 
-              onClick={() => handleAction('banco-win')}
-              disabled={gameState !== 'result' || !!winner}
-              className="w-full py-3 sm:py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold text-sm sm:text-base transition-colors shadow-lg shadow-red-900/20 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Banco Gagne
             </button>
           </div>
 
@@ -519,18 +547,17 @@ export function PuntoGame() {
             <div>
               <p className="font-bold text-emerald-400 mb-1">Banco</p>
               <ul className="list-disc list-inside space-y-1">
-                <li>2 : Tire si  Punto tire entre 2-7 </li>
+                <li>0-2 : Tire une carte </li>
                 <li>3 : Tire si  Punto tire sauf si la 3ème carte de Punto est un 8</li>
-                <li>4 : Tire si  Punto tire entre 4-7</li>
-                <li>5 : Tire si  Punto tire entre 5-7</li>
+                <li>4 : Tire si  Punto tire entre 2-7</li>
+                <li>5 : Tire si  Punto tire entre 4-7</li>
                 <li>6 : Tire si  Punto tire entre 6-7</li>
-                <li>6-7 : Banco prend les regles de Punto entre 0-5</li>
+                <li>6-7 : Banco tire entre 0 et 5 (prend les regles de tirage de Punto)</li>
                 <li>8-9 : <span className="text-yellow-400">Abbatage</span> (Fin du tour)</li>
               </ul>
             </div>
           </div>
         </div>
       </div>
-    </div>
   );
 }
