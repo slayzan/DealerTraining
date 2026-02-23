@@ -468,7 +468,7 @@ export function PuntoGame() {
                     className="w-full py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-all shadow-lg shadow-red-900/20 flex items-center justify-center gap-2"
                   >
                     <RotateCcw className="w-4 h-4" />
-                    Réessayer
+                      Réessayer
                   </button>
                 </div>
               </div>
