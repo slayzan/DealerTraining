@@ -31,6 +31,15 @@ export function DealerCounting() {
   const [userGuess, setUserGuess] = useState('');
   const [score, setScore] = useState({ correct: 0, total: 0 });
   const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   
   const timerRef = useRef<number | null>(null);
 
@@ -200,7 +209,7 @@ export function DealerCounting() {
         <div className="flex justify-center items-center h-50">
            {fullHand.length > 0 && (
              <div className="transform transition-all duration-200 hover:scale-105">
-               <PlayingCard card={fullHand[currentIndex]} />
+               <PlayingCard card={fullHand[currentIndex]} size={isMobile ? 'small' : 'medium'} minimal={isMobile} />
                <div className="mt-4 text-center text-emerald-500/50 text-xs font-mono">
                  Carte {currentIndex + 1} / {gameState === 'input' || feedback !== null ? fullHand.length : '?'}
                </div>
@@ -263,7 +272,7 @@ export function DealerCounting() {
                 <div className="flex justify-center -space-x-4 overflow-x-auto pb-2">
                   {fullHand.map((c, i) => (
                     <div key={i} className="transform scale-75 origin-top">
-                      <PlayingCard card={c} size="small" />
+                      <PlayingCard card={c} size={isMobile ? 'small' : 'medium'} minimal={isMobile} />
                     </div>
                   ))}
                 </div>

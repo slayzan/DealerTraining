@@ -28,84 +28,88 @@ export function CountingCards() {
   const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
   const [showAnswer, setShowAnswer] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
- useEffect(() => {
-    if (showCards && displayTimer > 0) {
-      const interval = setInterval(() => {
-        setDisplayTimer(t => {
-          if (t <= 0.1) {
-            setShowCards(false);
-            return 0;
-          }
-          return t - 0.1;
-        });
-      }, 100);
-      return () => clearInterval(interval);
-    }
-  }, [showCards, displayTimer]);
 
- const generateNewChallenge = () => {
-    const deck = shuffleDeck(createDeck());
-    const twoCards = deck.slice(0, 2);
-    
-    setCards(twoCards);
-    setUserAnswer('');
-    setFeedback(null);
-    setShowAnswer(false);
-    setShowCards(true);
-    setDisplayTimer(DIFFICULTIES[difficulty].displayTime);
-    setGameStarted(true);
-  };
-  
-  const calculateCardValue = (card: Card): number => {
-    if (card.rank === 'A') return 11; // Will be adjusted if needed
-    if (['J', 'Q', 'K'].includes(card.rank)) return 10;
-    return parseInt(card.rank);
-  };
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
-  const hasAce = (): boolean => {
-    return cards.some(card => card.rank === 'A');
-  };
-
-  const isBlackjack = (): boolean => {
-    if (cards.length !== 2) return false;
-    const hasAceCard = cards.some(card => card.rank === 'A');
-    const hasTenValueCard = cards.some(c=> ['10', 'J', 'Q', 'K'].includes(c.rank));
-    return hasAceCard && hasTenValueCard;
-  };
-
-  const calculateValues = (): { low: number; high: number; isBlackjack: boolean } => {
-    let total = 0;
-    let aces = 0;
-
-    cards.forEach(card => {
-      const value = calculateCardValue(card);
-      total += value;
-      if (card.rank === 'A'){
-        aces++;
+  useEffect(() => {
+      if (showCards && displayTimer > 0) {
+        const interval = setInterval(() => {
+          setDisplayTimer(t => {
+            if (t <= 0.1) {
+              setShowCards(false);
+              return 0;
+            }
+            return t - 0.1;
+          });
+        }, 100);
+        return () => clearInterval(interval);
       }
-    });
+    }, [showCards, displayTimer]);
 
-    // High value (all aces as 11)
-    const high = total;
+  const generateNewChallenge = () => {
+      const deck = shuffleDeck(createDeck());
+      const twoCards = deck.slice(0, 2);
     
-    // Low value (all aces as 1)
-    const low = total - (aces * 10);
+      setCards(twoCards);
+      setUserAnswer('');
+      setFeedback(null);
+      setShowAnswer(false);
+      setShowCards(true);
+      setDisplayTimer(DIFFICULTIES[difficulty].displayTime);
+      setGameStarted(true);
+    };
+    
+    
 
-    return { low, high, isBlackjack: isBlackjack() };
-  };
-  const getCorrectAnswer = (): string => {
+    const hasAce = (): boolean => {
+      return cards.some(card => card.rank === 'A');
+    };
+
+    const isBlackjack = (): boolean => {
+      if (cards.length !== 2) return false;
+      const hasAceCard = hasAce();
+      const hasTenValueCard = cards.some(c=> ['10', 'J', 'Q', 'K'].includes(c.rank));
+      return hasAceCard && hasTenValueCard;
+    };
+
+  const calculateValues = (): { low: number; high: number | null; isBlackjack: boolean } => {
+      let total = 0;
+      let aces = 0;
+
+      cards.forEach(card => {
+        if (card.rank === 'A') {
+          aces++;
+          total += 1;
+        } else if (['10','J','Q','K'].includes(card.rank)) {
+          total += 10;
+        } else {
+          total += parseInt(card.rank);
+        }
+      });
+
+      const low = total;
+
+      const high = (aces > 0 && total + 10 <= 21) ? total + 10 : null;
+      return { low, high, isBlackjack: isBlackjack() };
+    };
+
+    const getCorrectAnswer = (): string => {
     const { low, high } = calculateValues();
-    if (isBlackjack()){
-      return 'bj';
-    }
-    if (hasAce() && low !== high) {
+
+    if (isBlackjack()) return 'bj';
+
+    if (high !== null && low !== high) {
       return `${low} ${high}`;
     }
-    if (high > 21){
-      return low.toString();
-    }
-    return high.toString();
+
+    return low.toString();
   };
 
 
@@ -113,7 +117,6 @@ export function CountingCards() {
   const CheckAnswer = () => {
     const correctAnswer = getCorrectAnswer();
     const userTrimmed = userAnswer.trim();
-    console.log(`User Answer: ${userTrimmed}, Correct Answer: ${correctAnswer}`);
     const isCorrect = userTrimmed === correctAnswer;
     setFeedback(isCorrect ? 'correct' : 'incorrect');
     setScore(prev => ({
@@ -200,7 +203,7 @@ export function CountingCards() {
           <div className="flex justify-center gap-3 sm:gap-4 min-h-35 sm:min-h-45 items-center bg-emerald-900/30 rounded-xl p-6 sm:p-8">
             {showCards ? (
               cards.map((card, idx) => (
-                <PlayingCard key={idx} card={card} />
+                <PlayingCard key={idx} card={card} size={isMobile ? 'small' : 'medium'} minimal={isMobile} />
               ))
             ) : cards.length > 0 ? (
               cards.map((_, idx) => (
@@ -275,7 +278,7 @@ export function CountingCards() {
               <div className="text-white/70 text-sm mb-2">Les cartes étaient :</div>
               <div className='flex justify-center gap-2 mb-3'>
                 {cards.map((card, idx) => (
-                  <PlayingCard key={idx} card={card} size="small" />
+                  <PlayingCard key={idx} card={card} size={isMobile ? 'small' : 'medium'} minimal={isMobile} />
                 ))}
               </div>
             </div>
