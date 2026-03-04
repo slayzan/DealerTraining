@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import type { Card } from '../../utils/CardUtils';
-import type { PlayerResult } from '../../utils/Poker';
 import { PlayingCard } from '../../components/PlayingCards';
-import { createDeck, shuffleDeck } from '../../utils/CardUtils';
-import { determineWinner} from '../../utils/Poker';
+import type {Card} from '../../utils/CardUtils';
+import {createDeck, shuffleDeck } from '../../utils/CardUtils';
+import type { PlayerResult } from '../../utils/Poker';
+import { determineWinnerTexasHoldem } from '../../utils/Poker';
 import { Trophy, RefreshCw, CheckCircle, XCircle, Eye, Settings } from 'lucide-react';
 
-export function OmahaWinnerGame() {
+export function TexasHoldemWinnerGame() {
   const [board, setBoard] = useState<Card[]>([]);
   const [players, setPlayers] = useState<{ id: number; name: string; hand: Card[] }[]>([]);
   const [results, setResults] = useState<PlayerResult[] | null>(null);
@@ -16,7 +16,7 @@ export function OmahaWinnerGame() {
   const [isMobile, setIsMobile] = useState(false);
   
   // Settings
-  const [playerCount, setPlayerCount] = useState(4);
+  const [playerCount, setPlayerCount] = useState(3);
   const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
@@ -34,13 +34,13 @@ export function OmahaWinnerGame() {
     const deck = shuffleDeck(createDeck());
     const newBoard = deck.slice(0, 5);
     
-    // Create players
+    // Create players with 2 cards each (Texas Hold'em)
     const newPlayers = [];
     let deckIdx = 5;
     
     for (let i = 0; i < playerCount; i++) {
-        const hand = deck.slice(deckIdx, deckIdx + 4);
-        deckIdx += 4;
+        const hand = deck.slice(deckIdx, deckIdx + 2);
+        deckIdx += 2;
         newPlayers.push({
             id: i,
             name: `Joueur ${i+1}`,
@@ -68,7 +68,7 @@ export function OmahaWinnerGame() {
   const checkAnswer = () => {
     if (selectedWinners.length === 0) return;
 
-    const computedResults = determineWinner(board, players);
+    const computedResults = determineWinnerTexasHoldem(board, players);
     setResults(computedResults);
     setGameState('feedback');
   };
@@ -99,7 +99,7 @@ export function OmahaWinnerGame() {
               Qui Gagne ?
             </h2>
             <p className="text-sm sm:text-base text-emerald-200">
-              Analyse le board et les mains. Sélectionne le gagnant.
+              Analyse le board et les mains. Sélectionne le(s) gagnant(s).
             </p>
           </div>
           <div className="flex gap-2">
@@ -131,13 +131,13 @@ export function OmahaWinnerGame() {
                  <input 
                    type="range" 
                    min="2" 
-                   max="6" 
+                   max="9" 
                    value={playerCount} 
                    onChange={(e) => setPlayerCount(parseInt(e.target.value))}
                    className="w-full accent-emerald-500 h-2 bg-black/40 rounded-lg appearance-none cursor-pointer"
                  />
                  <div className="flex justify-between text-xs text-gray-400 px-1 font-mono">
-                   <span>2</span><span>6</span>
+                   <span>2</span><span>9</span>
                  </div>
               </label>
            </div>
@@ -155,7 +155,7 @@ export function OmahaWinnerGame() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
             >
-                 <PlayingCard card={card} size={isMobile ? 'small' : 'medium'} minimal={isMobile} />
+                <PlayingCard card={card} size={isMobile ? 'small' : 'medium'} minimal={isMobile} />
             </motion.div>
           ))}
         </div>
@@ -245,7 +245,7 @@ export function OmahaWinnerGame() {
                     ) : (
                         <>
                             <XCircle className="w-6 h-6" />
-                            Incorrect. Regarde les résultats.
+                            Incorrect. Regardez les résultats.
                         </>
                     )}
                 </div>

@@ -1,4 +1,4 @@
-
+import { Eye } from "lucide-react";
 
 export interface UltimateDrill {
   id: string;
@@ -13,6 +13,12 @@ interface UltimateSelectorProps {
 
 export function UltimateSelector({ onSelectDrill }: UltimateSelectorProps) {
     const drills: UltimateDrill[] = [
+        {
+            id: 'winner-game',
+            title: 'Qui Gagne ?',
+            description: 'Analysez les mains et déterminez le gagnant au showdown',
+            icon: Eye,
+        }
         
     ];
 

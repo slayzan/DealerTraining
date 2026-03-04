@@ -41,17 +41,9 @@ export function solveOmahaHand(hand: Card[], board: Card[], boardAnalysis?: Boar
   let bestEval: HandEvaluation | null = null;
 
   for (const pair of handPairs) {
-    // Optimization: Check Flush possibility for this pair
-    // Pair has 2 cards.
-    // To make flush, we need 5 cards same suit.
-    // If pair[0].suit == pair[1].suit (2 same suit in hand subset)
-    // AND board has >= 3 of that suit.
-    // Then we check flush.
-    
     const pairSuit = pair[0].suit === pair[1].suit ? pair[0].suit : null;
 
     for (const triplet of boardTriplets) {
-      // Flush Check Logic for this specific 5-card combo
       let doCheckFlush = false;
       if (pairSuit) {
         // If pair is suited, check if triplet is suited AND same suit
@@ -68,13 +60,11 @@ export function solveOmahaHand(hand: Card[], board: Card[], boardAnalysis?: Boar
         checkStraight,
         checkBoardPair
       );
-
       if (!bestEval || evalResult.score > bestEval.score) {
         bestEval = evalResult;
       }
     }
   }
-
   if (!bestEval) throw new Error("Evaluation failed");
   return bestEval;
 }

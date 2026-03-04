@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { UltimateSelector } from './UltimateSelector';
+import { TexasHoldemWinnerGame } from './TexasBoardWinner';
 
 export function UltimateTraining() {
     const [selectedDrill, setSelectedDrill] = useState<string | null>(null);
@@ -16,8 +17,9 @@ export function UltimateTraining() {
                 onClick={() => setSelectedDrill(null)}
                 className="text-emerald-300 hover:text-emerald-200 mb-4 text-sm sm:text-base"
             >
-                ← Retour aux exercices Ultimate
+                ← Retour aux exercices poker
             </button>
+            {selectedDrill == 'winner-game' && <TexasHoldemWinnerGame />}
         </div>
     );
 }
