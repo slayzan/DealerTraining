@@ -19,6 +19,11 @@ export function TexasHoldemWinnerGame() {
   const [playerCount, setPlayerCount] = useState(3);
   const [showSettings, setShowSettings] = useState(false);
 
+  // Helper function to check if a card is in the best hand
+  const isCardInBestHand = (card: Card, bestCards: Card[]) => {
+    return bestCards.some(bc => bc.rank === card.rank && bc.suit === card.suit);
+  };
+
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 640);
     checkMobile();
@@ -96,10 +101,10 @@ export function TexasHoldemWinnerGame() {
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-white mb-1 flex items-center gap-2">
               <Eye className="w-6 h-6 text-emerald-400" />
-              Qui Gagne ?
+              Qui Gagne ? (Showdown)
             </h2>
             <p className="text-sm sm:text-base text-emerald-200">
-              Analyse le board et les mains. Sélectionne le(s) gagnant(s).
+              Analysez le board et les mains. Sélectionnez le(s) gagnant(s).
             </p>
           </div>
           <div className="flex gap-2">
@@ -146,18 +151,30 @@ export function TexasHoldemWinnerGame() {
 
       {/* Board Area */}
       <div className="flex flex-col items-center mb-8 sm:mb-12">
-        <div className="text-emerald-300 text-sm uppercase tracking-widest font-bold mb-3">Board</div>
+        <div className="text-emerald-300 text-sm uppercase tracking-widest font-bold mb-3">Board (Table)</div>
         <div className="flex gap-2 sm:gap-4 p-4 bg-emerald-800/30 rounded-xl border border-white/5">
-          {board.map((card, i) => (
-            <motion.div
-                key={`board-${i}`}
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-            >
-                <PlayingCard card={card} size={isMobile ? 'small' : 'medium'} minimal={isMobile} />
-            </motion.div>
-          ))}
+          {board.map((card, i) => {
+            // Check if any winner uses this board card
+            const shouldHighlight = gameState === 'feedback' && results?.some(r => 
+              r.isWinner && isCardInBestHand(card, r.bestHand.bestCards)
+            );
+            
+            return (
+              <motion.div
+                  key={`board-${i}`}
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
+              >
+                  <PlayingCard 
+                    card={card} 
+                    size={isMobile ? 'small' : 'medium'} 
+                    minimal={isMobile} 
+                    highlight={shouldHighlight}
+                  />
+              </motion.div>
+            );
+          })}
         </div>
       </div>
 
@@ -208,9 +225,21 @@ export function TexasHoldemWinnerGame() {
                     </div>
                     
                     <div className="flex justify-center gap-0 sm:gap-2">
-                        {player.hand.map((card, i) => (
-                            <PlayingCard key={i} card={card} size="small" minimal={isMobile} />
-                        ))}
+                        {player.hand.map((card, i) => {
+                            // Check if this card is in the best hand for this player AND player is a winner
+                            const shouldHighlight = gameState === 'feedback' && playerResult && 
+                              playerResult.isWinner && isCardInBestHand(card, playerResult.bestHand.bestCards);
+                            
+                            return (
+                                <PlayingCard 
+                                    key={i} 
+                                    card={card} 
+                                    size="small" 
+                                    minimal={isMobile}
+                                    highlight={shouldHighlight}
+                                />
+                            );
+                        })}
                     </div>
                     
                     {/* Hand Result Description */}

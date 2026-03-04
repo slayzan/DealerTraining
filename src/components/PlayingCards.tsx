@@ -5,9 +5,10 @@ interface PlayingCardProps {
   card: Card;
   size?: 'small' | 'medium' | 'large';
   minimal?: boolean;
+  highlight?: boolean;
 }
 
-export function PlayingCard({ card, size = 'medium', minimal = false }: PlayingCardProps) {
+export function PlayingCard({ card, size = 'medium', minimal = false, highlight = false }: PlayingCardProps) {
   const suitSymbol = getSuitSymbol(card.suit);
   const color = getSuitColor(card.suit);
   
@@ -34,7 +35,11 @@ export function PlayingCard({ card, size = 'medium', minimal = false }: PlayingC
   const centerSize = minimal ? (size === 'small' ? 'text-2xl' : 'text-3xl') : (size === 'small' ? 'text-3xl' : size === 'medium' ? 'text-4xl' : 'text-5xl');
 
   return (
-    <div className={`${sizeClasses[size]} bg-white rounded-lg border-2 border-gray-300 shadow-lg p-1 flex flex-col relative shrink-0 select-none`}>
+    <div className={`${sizeClasses[size]} bg-white rounded-lg p-1 flex flex-col relative shrink-0 select-none ${
+      highlight 
+        ? 'border-4 border-yellow-400 shadow-[0_0_20px_rgba(251,191,36,0.8)] ring-2 ring-yellow-300/50' 
+        : 'border-2 border-gray-300 shadow-lg'
+    }`}>
       {/* Top-left corner */}
       <div className={`absolute top-0.5 left-1 ${color === 'red' ? 'text-red-600' : 'text-gray-900'} font-bold leading-none`}>
         <div className={rankSize}>{card.rank}</div>
