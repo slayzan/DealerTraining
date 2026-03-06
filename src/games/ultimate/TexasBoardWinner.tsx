@@ -152,7 +152,7 @@ export function TexasHoldemWinnerGame() {
       {/* Board Area */}
       <div className="flex flex-col items-center mb-8 sm:mb-12">
         <div className="text-emerald-300 text-sm uppercase tracking-widest font-bold mb-3">Board (Table)</div>
-        <div className="flex gap-2 sm:gap-4 p-4 bg-emerald-800/30 rounded-xl border border-white/5">
+        <div className="flex gap-2 sm:gap-4 p-4 bg-emerald-800/30 rounded-xl border  border-white/5">
           {board.map((card, i) => {
             // Check if any winner uses this board card
             const shouldHighlight = gameState === 'feedback' && results?.some(r => 
@@ -224,7 +224,7 @@ export function TexasHoldemWinnerGame() {
                         )}
                     </div>
                     
-                    <div className="flex justify-center gap-0 sm:gap-2">
+                    <div className="flex justify-center gap-2 sm:gap-2">
                         {player.hand.map((card, i) => {
                             // Check if this card is in the best hand for this player AND player is a winner
                             const shouldHighlight = gameState === 'feedback' && playerResult && 

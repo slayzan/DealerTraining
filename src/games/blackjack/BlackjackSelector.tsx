@@ -56,7 +56,7 @@ export function BlackjackSelector({ onSelectDrill }: BlackjackSelectorProps) {
                                       <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-red-400" />
                                     </div>
                                     <div>
-                                      <h3 className="text-base sm:text-lg font-bold text-white">{drill.title}</h3>
+                                      <h3 className="text-sm sm:text-lg font-bold text-white">{drill.title}</h3>
                                     </div>
                                   </div>
                                   <p className="text-emerald-200 text-sm sm:text-base px-2">{drill.description}</p>
