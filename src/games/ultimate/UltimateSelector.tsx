@@ -1,4 +1,4 @@
-import { Eye } from "lucide-react";
+import { Eye, Zap } from "lucide-react";
 
 export interface UltimateDrill {
   id: string;
@@ -18,6 +18,12 @@ export function UltimateSelector({ onSelectDrill }: UltimateSelectorProps) {
             title: 'Qui Gagne ?',
             description: 'Analysez les mains et déterminez le gagnant au showdown',
             icon: Eye,
+        },
+        {
+            id: 'ultimate-payout',
+            title: 'Payement Ultimate',
+            description: 'Apprend le tableau de payement du Texas Ultimate',
+            icon: Zap,
         }
     ];
 

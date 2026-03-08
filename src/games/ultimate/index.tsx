@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { UltimateSelector } from './UltimateSelector';
 import { TexasHoldemWinnerGame } from './TexasBoardWinner';
+import { TexasHoldemPayoutQuiz } from './TexasUltimatePayout';
 
 export function UltimateTraining() {
     const [selectedDrill, setSelectedDrill] = useState<string | null>(null);
@@ -20,6 +21,7 @@ export function UltimateTraining() {
                 ← Retour aux exercices poker
             </button>
             {selectedDrill == 'winner-game' && <TexasHoldemWinnerGame />}
+            {selectedDrill == 'ultimate-payout' && <TexasHoldemPayoutQuiz />}
         </div>
     );
 }
