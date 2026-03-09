@@ -34,8 +34,8 @@ const PAYOUT_TABLE = {
     progressive: '500€'
   },
   'Straight Flush': {
-    bonus: '50x',
-    blinde: '40x',
+    bonus: '40x',
+    blinde: '50x',
     progressive: '1500€'
   },
   'Royal Flush': {
@@ -49,8 +49,8 @@ type PayoutHandType = keyof typeof PAYOUT_TABLE;
 
 // Options de réponses disponibles (valeurs réelles du tableau)
 const ANSWER_OPTIONS = {
-  bonus: ['3x', '4x', '7x', '8x', '30x', '50x'],
-  blinde: ['0x', '1x', '1.5x', '3x', '10x', '40x', '500x'],
+  bonus: ['3x', '4x', '7x', '8x', '30x','40x', '50x'],
+  blinde: ['0x', '1x', '1.5x', '3x', '10x', '50x', '500x'],
   progressive: ['50€', '500€', '1500€', 'Aucun']
 } as const;
 

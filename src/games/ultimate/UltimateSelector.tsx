@@ -21,8 +21,8 @@ export function UltimateSelector({ onSelectDrill }: UltimateSelectorProps) {
         },
         {
             id: 'ultimate-payout',
-            title: 'Payement Ultimate',
-            description: 'Apprend le tableau de payement du Texas Ultimate',
+            title: 'Paiements Ultimate',
+            description: 'Apprend le tableau de paiement du Texas Ultimate',
             icon: Zap,
         }
     ];
