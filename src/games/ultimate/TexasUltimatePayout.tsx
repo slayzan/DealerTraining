@@ -201,8 +201,9 @@ export function TexasHoldemPayoutQuiz() {
       
       case 'Four of a Kind': {
         // K K K K x
-        const ranks = ['A', 'K', 'Q', 'J', '10', '9', '8', '7'];
+        const ranks = ['A', ' K', 'Q', 'J', '10', '9', '8','6'];
         const quadRank = ranks[Math.floor(Math.random() * ranks.length)] as Card['rank'];
+        console.log('quadrank : ', quadRank);
         return {
           board: [
             { rank: quadRank, suit: 'hearts' },

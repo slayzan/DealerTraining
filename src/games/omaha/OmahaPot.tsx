@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import { Settings, Play, RefreshCw, Calculator, CheckCircle, XCircle } from 'lucide-react';
 
+
+type Action = 'POT' | 'Call' | 'Straddle' | null;
 
 interface Player {
   id: number;
@@ -11,7 +13,7 @@ interface Player {
   hasFolded: boolean;
   isDealer: boolean;
   isActive: boolean;
-  lastAction?: string;
+  lastAction: Action;
 }
 
 interface GameSettings {
@@ -22,6 +24,8 @@ interface GameSettings {
 }
 
 export function OmahaPotGame() {
+  const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const gameIdRef = useRef(0);
   const [settings, setSettings] = useState<GameSettings>({ sb: 2, bb: 4, straddle: false, maxBetCap: 10000 });
   const [players, setPlayers] = useState<Player[]>([]);
   const [pot, setPot] = useState(0);
@@ -34,14 +38,25 @@ export function OmahaPotGame() {
   // Game state tracking
   const [currentHighBet, setCurrentHighBet] = useState(0);
   
+
   const [showSettings, setShowSettings] = useState(false);
+
+  
   
   // Initialize table
   useEffect(() => {
     initializeTable();
   }, [settings]);
 
+  const clearAllTimeouts = () => {
+    timeoutsRef.current.forEach(clearTimeout);
+    timeoutsRef.current = [];
+  };
+
   const initializeTable = () => {
+
+    clearAllTimeouts();
+
     const positions = ['SB', 'BB', 'UTG', 'UTG+1', 'MP', 'MP+1', 'CO', 'BTN'];
     const newPlayers = Array(8).fill(null).map((_, i) => ({
       id: i,
@@ -50,7 +65,8 @@ export function OmahaPotGame() {
       currentBet: 0,
       hasFolded: false,
       isDealer: i === 7,
-      isActive: false
+      isActive: false,
+      lastAction: null
     })) as Player[];
 
     // Post Blinds immediately for visual feedback
@@ -74,16 +90,26 @@ export function OmahaPotGame() {
     setGameState('idle');
     setFeedback(null);
     setDiceResult(null);
+    setUserInput('');
   };
 
+  
+
   const startHand = () => {
-    const newPlayers = players.map(p => ({
+
+    clearAllTimeouts();
+
+    gameIdRef.current += 1; // ✅ NOUVEAU GAME
+    const currentGameId = gameIdRef.current;
+
+    const newPlayers: Player[] = players.map(p => ({
       ...p,
       currentBet: 0,
       hasFolded: false,
-      isActive: false
+      isActive: false,
+      lastAction: null
     }));
-
+ 
     // Post Blinds
     let currentPot = 0;
     
@@ -111,24 +137,33 @@ export function OmahaPotGame() {
     setPot(currentPot);
     setCurrentHighBet(highBet);
     setCurrentPlayerIdx(nextIdx % 8);
+
     setGameState('playing');
     setFeedback(null);
     setDiceResult(null);
+    setUserInput('');
+    
     
     // Start loop
-    setTimeout(() => playTurn(nextIdx % 8, newPlayers, currentPot, highBet), 1000);
+    const t = setTimeout(() => {
+    playTurn(nextIdx % 8, newPlayers, currentPot, highBet, currentGameId);
+  }, 500);
+
+  timeoutsRef.current.push(t);
   };
 
   const playTurn = (
     playerIdx: number, 
     currentPlayers: Player[], 
     currentTotalPot: number, 
-    highBet: number
+    highBet: number,
+    gameId:number
   ) => {
     // Check if round should end (everyone matched highBet)
     // If all active players have the same bet amount equal to the high bet, the round is complete.
     const activeParticipants = currentPlayers.filter(p => !p.hasFolded);
     const allBetsEqual = activeParticipants.every(p => p.currentBet === highBet);
+    if (gameId !== gameIdRef.current) return;
 
     if (allBetsEqual && activeParticipants.length > 0) {
       setGameState('finished');
@@ -150,9 +185,12 @@ export function OmahaPotGame() {
     const dice = diceResult;
     console.log(dice);
 
-    setTimeout(() => {
+    const t = setTimeout(() => {
+      if (gameId !== gameIdRef.current) return;
       handleDiceResult(roll, playerIdx, updatedPlayers, currentTotalPot, highBet);
-    }, 1000); // Delay for user to see dice
+    }, 1000);
+    timeoutsRef.current.push(t);
+
   };
 
   const handleDiceResult = (
@@ -163,6 +201,8 @@ export function OmahaPotGame() {
     highBet: number
   ) => {
     const player = currentPlayers[playerIdx];
+    const currentGameId = gameIdRef.current;
+
 
     // 1 or 6: POT (Player wants to raise POT)
     if (roll === 1 || roll === 6) {
@@ -185,12 +225,13 @@ export function OmahaPotGame() {
       // Next player
       const nextIdx = (playerIdx + 1) % 8;
       setTimeout(() => {
-         playTurn(nextIdx, newPlayers, newPot, highBet);
+         playTurn(nextIdx, newPlayers, newPot, highBet, currentGameId);
       }, 1500);
     }
   };
 
   const submitPotCalculation = () => {
+    const currentGameId = gameIdRef.current;
     const val = parseInt(userInput);
     if (isNaN(val)) return;
 
@@ -239,7 +280,7 @@ export function OmahaPotGame() {
 
         setGameState('playing');
         const nextIdx = (currentPlayerIdx + 1) % 8;
-        playTurn(nextIdx, newPlayers, newPot, newHighBet);
+        playTurn(nextIdx, newPlayers, newPot, newHighBet,currentGameId);
       }, 1500);
 
     } else {
@@ -270,9 +311,13 @@ export function OmahaPotGame() {
           </div>
           <div className="flex gap-2">
             <button
-               onClick={startHand}
-               className="p-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white transition-colors shadow-lg shadow-emerald-900/20"
-               title="Nouvelle Main / Relancer"
+               onClick={() => {
+                initializeTable();
+                setTimeout(startHand, 100);
+              }}
+             
+              className="p-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white transition-colors shadow-lg shadow-emerald-900/20"
+              title="Nouvelle Main / Relancer"
             >
                <RefreshCw className="w-5 h-5" />
             </button>
@@ -291,9 +336,26 @@ export function OmahaPotGame() {
             <label className="flex flex-col">
               <span className="text-emerald-400 text-xs mb-1">Petite Blinde</span>
               <input 
-                type="number" 
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 value={settings.sb}
-                onChange={(e) => setSettings({...settings, sb: parseInt(e.target.value) || 0})}
+                onChange={(e) => {
+                  const val = e.target.value;
+                    if (val === '') {
+                    setSettings({ ...settings, sb: '' as any }); // temporaire
+                    return;
+                  }
+                  if (!/^\d+$/.test(val)) return;
+                  const num = parseInt(val);
+                  const bb = settings.bb
+
+                  if (bb < num) {
+                    console.warn("BB doit être >= SB");
+                    return;
+                  }
+                setSettings({ ...settings, sb: num });
+                }}
                 className="w-full bg-black/40 border border-emerald-700/50 rounded px-3 py-2 text-white focus:outline-none focus:border-emerald-500 transition-colors"
               />
             </label>
@@ -302,7 +364,17 @@ export function OmahaPotGame() {
               <input 
                 type="number" 
                 value={settings.bb}
-                onChange={(e) => setSettings({...settings, bb: parseInt(e.target.value) || 0})}
+                onChange={(e) => {
+                const val = e.target.value;
+                  if (val === '') {
+                    setSettings({ ...settings, bb: '' as any }); // temporaire
+                    return;
+                  }
+                const num = parseInt(val);
+                  if (!isNaN(num)) {
+                    setSettings({ ...settings, bb: num });
+                  }
+              }}
                 className="w-full bg-black/40 border border-emerald-700/50 rounded px-3 py-2 text-white focus:outline-none focus:border-emerald-500 transition-colors"
               />
             </label>
