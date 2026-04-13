@@ -204,13 +204,13 @@ export function OmahaPotGame() {
     const currentGameId = gameIdRef.current;
 
 
-    // 1 or 6: POT (Player wants to raise POT)
-    if (roll === 1 || roll === 6) {
+    // 1,4,6: POT (Player wants to raise POT)
+    if (roll === 1 || roll === 6 || roll === 4 ) {
       setGameState('waiting_input');
       // Wait for user input
       return;
     } 
-    // 2, 3, 4, 5: CALL
+    // 2, 3, 5: CALL
     else {
       // Execute Call
       const toCall = highBet - player.currentBet;
