@@ -1,4 +1,4 @@
-import { Target, Zap, Users } from 'lucide-react';
+import { Target, Zap, Users, Calculator} from 'lucide-react';
 
 export interface BlackjackDrill {
   id: string;
@@ -23,14 +23,20 @@ export function BlackjackSelector({ onSelectDrill }: BlackjackSelectorProps) {
       id: 'blackjack-calcul',
       title: 'Calcul Blackjack',
       description: 'Pratique le calcul des blackjacks et ameliore ta rapidité',
+      icon: Calculator,
+    },
+    {
+      id: 'fast-draw',
+      title: 'Tirage Rapide',
+      description: 'Memorise les cartes rapidement et trouve le resultat final',
       icon: Zap,
     },
     {
       id: 'bank-draw',
       title: 'Tirage Banque',
-      description: 'Tire les cartes comme a la banque et trouve le resultat final',
+      description: 'Tire les cartes comme a la banque le plus rapidement possible',
       icon: Users,
-    }
+    },
   ];
 
     return (
