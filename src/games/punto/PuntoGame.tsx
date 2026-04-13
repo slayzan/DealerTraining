@@ -18,6 +18,8 @@ export function PuntoGame() {
   const [difficulty, setDifficulty] = useState<'easy' | 'hard'>('easy');
   const [isMobile, setIsMobile] = useState(false);
 
+  const showDifficulty = false;
+
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 640);
     checkMobile();
@@ -285,7 +287,22 @@ export function PuntoGame() {
 
     if (userClaim === actualWinner) {
       setFeedback("Correct ! Bien joué.");
-      setWinner(actualWinner === 'punto-win' ? 'punto' : actualWinner === 'banco-win' ? 'banco' : 'egalite');
+
+      const win =
+        actualWinner === 'punto-win'
+          ? 'punto'
+          : actualWinner === 'banco-win'
+          ? 'banco'
+          : 'egalite';
+
+      setWinner(win);
+
+      // 🔥 AUTO NEXT HAND
+      setTimeout(() => {
+        setFeedback(null);
+        setWinner(null);
+        dealGame();
+      }, 1200); // tu peux ajuster (300 = rapide, 1000 = plus lisible)
     } else {
       setFeedback(`Incorrect. Le vrai résultat est : ${actualWinner.replace('-', ' ').toUpperCase()}`);
       if (difficulty === 'hard') {
@@ -304,6 +321,7 @@ export function PuntoGame() {
           </div>
           
           <div className="flex flex-col-reverse sm:flex-row gap-2 items-end sm:items-center">
+            {showDifficulty && (
             <div className="bg-black/40 p-1 rounded-lg border border-white/10 flex">
               <button
                 onClick={() => setDifficulty('easy')}
@@ -315,6 +333,7 @@ export function PuntoGame() {
               >
                 Facile
               </button>
+             
               <button
                 onClick={() => setDifficulty('hard')}
                 className={`px-2 py-1 sm:px-3 sm:py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all ${
@@ -326,6 +345,7 @@ export function PuntoGame() {
                 Difficile
               </button>
             </div>
+            )}
 
             <button
               onClick={dealGame}
