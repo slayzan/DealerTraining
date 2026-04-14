@@ -110,10 +110,16 @@ export function BlackjackBankDraw() {
     return total;
   };
 
+  const isBlackjack = (cards: Card[]): boolean => {
+    if (cards.length !== 2) return false;
+    const total = calculateTotal(cards);
+    return total === 21;
+  };
+
   const startNewRound = () => {
     const newDeck = shuffleDeck(createDeck());
+  
     const firstCard = newDeck[0];
-    
     setDeck(newDeck.slice(1));
     setDealerCards([firstCard]);
     setGameState('playing');
@@ -280,15 +286,17 @@ export function BlackjackBankDraw() {
         {gameState === 'wrong' && (
           <div className="text-center mt-6">
             <div className="text-lg sm:text-xl font-bold text-red-400">
-              {errorMessage}
+              {isBlackjack(dealerCards)? 'Erreur vous avez un Blackjack' : errorMessage}
             </div>
           </div>
         )}
 
-        {gameState === 'correct' && (
+        {gameState === "correct" && (
           <div className="text-center mt-6">
             <div className="text-lg sm:text-xl font-bold text-emerald-400">
-              ✓ Correct ! Main terminée à {calculateTotal(dealerCards)}
+              {isBlackjack(dealerCards)
+                ? "Blackjack"
+                : `Correct ! Main terminée à ${calculateTotal(dealerCards)}`}
             </div>
           </div>
         )}
