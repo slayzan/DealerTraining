@@ -1,10 +1,21 @@
+import { useState } from 'react';
 import { Spade, Heart, Diamond, Club} from 'lucide-react';
 
 interface GameSelectorProps {
-    onSelect: (game: 'blackjack' | 'ultimate' | 'menu' | 'punto bunco' | 'omaha') => void;
+    onSelect: (game: 'blackjack' | 'ultimate' | 'menu' | 'punto bunco' | 'omaha' | 'roulette') => void;
 }
 
 export function GameSelector({ onSelect }: GameSelectorProps) {
+     const [spadeClicks, setSpadeClicks] = useState(0);
+
+    const handleSpadeClick = () => {
+    const next = spadeClicks + 1;
+    setSpadeClicks(next);
+    if (next >= 3) {
+      setSpadeClicks(0);
+      onSelect('roulette');
+    }
+  };
     const modules = [
         {
             id: 'blackjack' as const,
@@ -41,7 +52,7 @@ export function GameSelector({ onSelect }: GameSelectorProps) {
             <div className='text-center mb-8 sm:mb-12'>
                 <div className='flex justify-center gap-3 mb-4'>
                     <Diamond className="w-8 h-8 sm:w-12 sm:h-12 text-red-400" />
-                    <Spade className="w-8 h-8 sm:w-12 sm:h-12 text-white" />
+                    <Spade onClick={handleSpadeClick} className="w-8 h-8 sm:w-12 sm:h-12 text-white" />
                     <Heart className="w-8 h-8 sm:w-12 sm:h-12 text-red-400" />
                     <Club className="w-8 h-8 sm:w-12 sm:h-12 text-white" />
                 </div>

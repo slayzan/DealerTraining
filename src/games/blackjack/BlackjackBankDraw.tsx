@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import type { Card } from '../../utils/CardUtils';
 import {createDeck, shuffleDeck } from '../../utils/CardUtils';
 import { PlayingCard } from '../../components/PlayingCards';
-import { Trophy, RotateCcw, Target, Clock } from 'lucide-react';
+import { Trophy, RotateCcw, Clock } from 'lucide-react';
 
 type Difficulty = 'easy' | 'medium' | 'hard';
 

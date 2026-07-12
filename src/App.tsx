@@ -4,12 +4,13 @@ import { BlackjackTraining } from './games/blackjack';
 import { UltimateTraining } from './games/ultimate';
 import { PuntoTraining } from './games/punto';
 import { OmahaTraining } from './games/omaha';
+import { RouletteTraining } from './games/roulette';
 
 import './App.css'
 import Logo from './assets/DealerBg.png'
 
 function App() {
-  const [currentModule, setCurrentModule] = useState<'menu' | 'blackjack' | 'ultimate' | 'punto bunco' | 'omaha'>('menu');
+  const [currentModule, setCurrentModule] = useState<'menu' | 'blackjack' | 'ultimate' | 'punto bunco' | 'omaha' | 'roulette'>('menu');
   return (
     <>
       <div className="min-h-screen bg-linear-to-br from-emerald-900 via-emerald-800 to-green-900">
@@ -34,6 +35,7 @@ function App() {
         { currentModule === 'ultimate' && <UltimateTraining /> }
         { currentModule === 'punto bunco' && <PuntoTraining /> }
         { currentModule === 'omaha' && <OmahaTraining /> }
+        { currentModule === 'roulette' && <RouletteTraining/>}
       </main>
       </div>
     </>
